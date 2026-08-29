@@ -1,12 +1,14 @@
 import { Router } from 'express';
-import { verificarToken } from '../middlewares/auth.middleware';
-import { seguirUsuario, dejarDeSeguir, listarSeguidores, listarSeguidos } from '../controllers/follow.controller';
+import { followUser, unfollowUser, getFollowers, getFollowing } from '../controllers/follow.controller';
+import { verifyToken } from '../middlewares/auth.middleware';
 
 const router = Router();
 
-router.post('/:userId', verificarToken, seguirUsuario);
-router.delete('/:userId', verificarToken, dejarDeSeguir);
-router.get('/:userId/seguidores', verificarToken, listarSeguidores);
-router.get('/:userId/seguidos', verificarToken, listarSeguidos);
+router.use(verifyToken);
+
+router.post('/:userId', followUser);
+router.delete('/:userId', unfollowUser);
+router.get('/:userId/followers', getFollowers);
+router.get('/:userId/following', getFollowing);
 
 export default router;

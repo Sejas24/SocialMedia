@@ -1,46 +1,73 @@
 import { Request, Response } from 'express';
 import { Like } from '../models';
 
-export const darLike = async (req: Request, res: Response) => {
+export const likePost = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { postId } = req.params;
-    const userId = (req as any).user.id;
+    const postId = Number(req.params.postId);
 
-    const existente = await Like.findOne({ where: { postId, userId } });
-    if (existente) {
-      return res.status(400).json({ error: 'Ya diste like a esta publicación' });
+    if (isNaN(postId)) {
+      res.status(400).json({ message: 'El postId debe ser un número válido' });
+      return;
+    }
+
+    const userId = req.user!.id;
+
+    const existing = await Like.findOne({ where: { postId, userId } });
+    if (existing) {
+      res.status(400).json({ message: 'Ya diste like a esta publicación' });
+      return;
     }
 
     await Like.create({ postId, userId });
-    const total = await Like.count({ where: { postId } });
-    res.status(201).json({ mensaje: 'Like agregado', total });
+    const likesCount = await Like.count({ where: { postId } });
+
+    res.status(201).json({ message: 'Like agregado', likesCount });
   } catch (error) {
-    res.status(500).json({ error: 'Error al dar like' });
+    console.error(error);
+    res.status(500).json({ message: 'Error al dar like' });
   }
 };
 
-export const quitarLike = async (req: Request, res: Response) => {
+export const unlikePost = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { postId } = req.params;
-    const userId = (req as any).user.id;
+    const postId = Number(req.params.postId);
+
+    if (isNaN(postId)) {
+      res.status(400).json({ message: 'El postId debe ser un número válido' });
+      return;
+    }
+
+    const userId = req.user!.id;
 
     const like = await Like.findOne({ where: { postId, userId } });
-    if (!like) return res.status(404).json({ error: 'No has dado like a esta publicación' });
+    if (!like) {
+      res.status(404).json({ message: 'No has dado like a esta publicación' });
+      return;
+    }
 
     await like.destroy();
-    const total = await Like.count({ where: { postId } });
-    res.json({ mensaje: 'Like eliminado', total });
+    const likesCount = await Like.count({ where: { postId } });
+
+    res.status(200).json({ message: 'Like eliminado', likesCount });
   } catch (error) {
-    res.status(500).json({ error: 'Error al quitar like' });
+    console.error(error);
+    res.status(500).json({ message: 'Error al quitar like' });
   }
 };
 
-export const contarLikes = async (req: Request, res: Response) => {
+export const getLikesCount = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { postId } = req.params;
-    const total = await Like.count({ where: { postId } });
-    res.json({ postId, total });
+    const postId = Number(req.params.postId);
+
+    if (isNaN(postId)) {
+      res.status(400).json({ message: 'El postId debe ser un número válido' });
+      return;
+    }
+
+    const likesCount = await Like.count({ where: { postId } });
+    res.status(200).json({ postId, likesCount });
   } catch (error) {
-    res.status(500).json({ error: 'Error al contar likes' });
+    console.error(error);
+    res.status(500).json({ message: 'Error al contar los likes' });
   }
 };

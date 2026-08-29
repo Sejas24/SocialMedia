@@ -1,52 +1,90 @@
 import { Request, Response } from 'express';
-import { Comment, User } from '../models';
+import { Post, Comment, User, Like } from '../models';
 
-export const crearComentario = async (req: Request, res: Response) => {
+export const createComment = async (req: Request, res: Response): Promise<void> => {
   try {
+    const postId = Number(req.params.postId);
     const { content } = req.body;
-    const { postId } = req.params;
-    const userId = (req as any).user.id;
 
-    if (!content) {
-      return res.status(400).json({ error: 'El contenido es requerido' });
+    if (isNaN(postId)) {
+      res.status(400).json({ message: 'El postId debe ser un número válido' });
+      return;
     }
 
-    const comentario = await Comment.create({ content, userId, postId });
-    res.status(201).json(comentario);
+    if (!content || content.trim() === '') {
+      res.status(400).json({ message: 'El contenido del comentario es obligatorio' });
+      return;
+    }
+
+    const comment = await Comment.create({
+      content,
+      userId: req.user!.id,
+      postId,
+    });
+
+    const commentWithAuthor = await Comment.findByPk(comment.id, {
+      include: [{ model: User, attributes: ['id', 'name', 'avatar'] }],
+    });
+
+    res.status(201).json({
+      message: 'Comentario creado correctamente',
+      comment: commentWithAuthor,
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Error al crear el comentario' });
+    console.error(error);
+    res.status(500).json({ message: 'Error al crear el comentario' });
   }
 };
 
-export const obtenerComentariosPorPost = async (req: Request, res: Response) => {
+export const getCommentsByPost = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { postId } = req.params;
-    const comentarios = await Comment.findAll({
+    const postId = Number(req.params.postId);
+
+    if (isNaN(postId)) {
+      res.status(400).json({ message: 'El postId debe ser un número válido' });
+      return;
+    }
+
+    const comments = await Comment.findAll({
       where: { postId },
-      include: [{ model: User, attributes: ['id', 'nombre'] }],
+      include: [{ model: User, attributes: ['id', 'name', 'avatar'] }],
       order: [['createdAt', 'ASC']],
     });
-    res.json(comentarios);
+
+    res.status(200).json({ comments });
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener comentarios' });
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener los comentarios' });
   }
 };
 
-export const eliminarComentario = async (req: Request, res: Response) => {
+export const deleteComment = async (req: Request, res: Response): Promise<void> => {
   try {
-    const comentario = await Comment.findByPk(req.params.id);
-    if (!comentario) return res.status(404).json({ error: 'Comentario no encontrado' });
+    const id = Number(req.params.id);
 
-    const userId = (req as any).user.id;
-    const role = (req as any).user.role;
-
-    if ((comentario as any).userId !== userId && role !== 'admin') {
-      return res.status(403).json({ error: 'No autorizado' });
+    if (isNaN(id)) {
+      res.status(400).json({ message: 'El id debe ser un número válido' });
+      return;
     }
 
-    await comentario.destroy();
-    res.json({ mensaje: 'Comentario eliminado' });
+    const comment = await Comment.findByPk(id);
+    if (!comment) {
+      res.status(404).json({ message: 'Comentario no encontrado' });
+      return;
+    }
+
+    const isOwner = comment.userId === req.user!.id;
+    const isAdmin = req.user!.role === 'admin';
+
+    if (!isOwner && !isAdmin) {
+      res.status(403).json({ message: 'No tienes permiso para eliminar este comentario' });
+      return;
+    }
+
+    await comment.destroy();
+    res.status(200).json({ message: 'Comentario eliminado correctamente' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar comentario' });
+    console.error(error);
+    res.status(500).json({ message: 'Error al eliminar el comentario' });
   }
 };

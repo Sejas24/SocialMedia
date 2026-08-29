@@ -1,11 +1,13 @@
 import { Router } from 'express';
-import { verificarToken } from '../middlewares/auth.middleware';
-import { darLike, quitarLike, contarLikes } from '../controllers/like.controller';
+import { likePost, unlikePost, getLikesCount } from '../controllers/like.controller';
+import { verifyToken } from '../middlewares/auth.middleware';
 
 const router = Router();
 
-router.post('/:postId', verificarToken, darLike);
-router.delete('/:postId', verificarToken, quitarLike);
-router.get('/:postId', verificarToken, contarLikes);
+router.use(verifyToken);
+
+router.post('/:postId', likePost);
+router.delete('/:postId', unlikePost);
+router.get('/:postId', getLikesCount);
 
 export default router;

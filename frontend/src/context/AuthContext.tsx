@@ -5,7 +5,7 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
-  login: (user: User, token: string) => void;
+  login: (user: User, token: string, rememberMe: boolean) => void;
   logout: () => void;
   loading: boolean;
 }
@@ -18,8 +18,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
+    // Revisa ambos storages: localStorage (recuérdame) y sessionStorage (sesión temporal)
+    const storedToken = localStorage.getItem('token') || sessionStorage.getItem('token');
+    const storedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
 
     if (storedToken && storedUser) {
       setToken(storedToken);
@@ -29,9 +30,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(false);
   }, []);
 
-  const login = (userData: User, authToken: string) => {
-    localStorage.setItem('token', authToken);
-    localStorage.setItem('user', JSON.stringify(userData));
+  const login = (userData: User, authToken: string, rememberMe: boolean) => {
+    const storage = rememberMe ? localStorage : sessionStorage;
+    storage.setItem('token', authToken);
+    storage.setItem('user', JSON.stringify(userData));
     setToken(authToken);
     setUser(userData);
   };
@@ -39,6 +41,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
     setToken(null);
     setUser(null);
   };

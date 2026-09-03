@@ -4,7 +4,7 @@ import { User } from '../models';
 export const getMe = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await User.findByPk(req.user!.id, {
-      attributes: { exclude: ['password'] },
+      attributes: { exclude: ['password', 'resetToken', 'resetTokenExpiry'] },
     });
 
     if (!user) {
@@ -57,7 +57,7 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
     }
 
     const user = await User.findByPk(id, {
-      attributes: { exclude: ['password'] },
+      attributes: { exclude: ['password', 'resetToken', 'resetTokenExpiry'] },
     });
 
     if (!user) {
@@ -75,7 +75,7 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
 export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
   try {
     const users = await User.findAll({
-      attributes: { exclude: ['password'] },
+      attributes: { exclude: ['password', 'resetToken', 'resetTokenExpiry'] },
       order: [['createdAt', 'DESC']],
     });
 

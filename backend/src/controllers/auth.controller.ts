@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import { User } from '../models';
 import { generateToken } from '../utils/jwt';
 
@@ -83,5 +84,76 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error al iniciar sesión' });
+  }
+};
+
+export const forgotPassword = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      res.status(400).json({ message: 'El email es obligatorio' });
+      return;
+    }
+
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      res.status(200).json({
+        message: 'Si el email existe, se generó un token de recuperación',
+      });
+      return;
+    }
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiry = new Date(Date.now() + 15 * 60 * 1000); // 15 minutos
+
+    user.resetToken = token;
+    user.resetTokenExpiry = expiry;
+    await user.save();
+
+    res.status(200).json({
+      message: 'Token de recuperación generado (simulación de email)',
+      resetToken: token,
+      expiresInMinutes: 15,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al generar el token de recuperación' });
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+      res.status(400).json({ message: 'Token y nueva contraseña son obligatorios' });
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      res.status(400).json({ message: 'La contraseña debe tener al menos 6 caracteres' });
+      return;
+    }
+
+    const user = await User.findOne({ where: { resetToken: token } });
+
+    if (!user || !user.resetTokenExpiry || user.resetTokenExpiry < new Date()) {
+      res.status(400).json({ message: 'Token inválido o expirado' });
+      return;
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPassword;
+    user.resetToken = null;
+    user.resetTokenExpiry = null;
+    await user.save();
+
+    res.status(200).json({ message: 'Contraseña actualizada correctamente' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al restablecer la contraseña' });
   }
 };

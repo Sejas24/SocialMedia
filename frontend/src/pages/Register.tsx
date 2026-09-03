@@ -21,7 +21,7 @@ const Register = () => {
 
         try {
             const { data } = await registerRequest({ name, email, password });
-            login(data.user, data.token);
+            login(data.user, data.token, true);
             navigate('/');
         } catch (err) {
             if (axios.isAxiosError(err) && err.response) {

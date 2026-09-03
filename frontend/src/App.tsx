@@ -1,20 +1,25 @@
-import { useEffect, useState } from 'react';
-import api from './services/api';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-  const [mensaje, setMensaje] = useState<string>('');
-
-  useEffect(() => {
-    api.get('/')
-      .then(res => setMensaje(res.data.message))
-      .catch(() => setMensaje('❌ Error conectando al backend'));
-  }, []);
-
   return (
-    <div>
-      <h1>Test de conexión</h1>
-      <p>{mensaje}</p>
-    </div>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <h1>Feed principal</h1>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 

@@ -22,7 +22,6 @@ function App() {
         element={
           <ProtectedRoute>
             <Layout />
-            <Route path="/admin" element={<Admin />} />
           </ProtectedRoute>
         }
       >
@@ -30,6 +29,7 @@ function App() {
         <Route path="/profile/me" element={<Profile />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/posts/:id" element={<PostDetail />} />
+        <Route path="/admin" element={<Admin />} />
         
       </Route>
 

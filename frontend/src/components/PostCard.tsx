@@ -42,6 +42,7 @@ const PostCard = ({ post, onDelete }: Props) => {
 
       <div className="post-stats">
         <span className="likes">❤️ {post.likesCount} likes</span>
+        <LikeButton post={post} />
         <Link to={`/posts/${post.id}`}>💬 {post.commentsCount} comentarios</Link>
       </div>
     </article>

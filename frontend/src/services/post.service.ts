@@ -9,3 +9,8 @@ export const createPostRequest = (data: { content: string; image?: string }) =>
 
 export const deletePostRequest = (id: number) =>
     api.delete<{ message: string }>(`/posts/${id}`);
+
+export const getPostsByUserRequest = (userId: number) =>
+  api.get<{ posts: Post[] }>(
+    `/posts/user/${userId}`
+  );

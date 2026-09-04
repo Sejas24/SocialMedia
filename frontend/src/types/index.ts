@@ -19,6 +19,7 @@ export interface Post {
   User: Pick<User, 'id' | 'name' | 'avatar'>;
   likesCount: number;
   commentsCount: number;
+  likedByCurrentUser?: boolean;
   createdAt: string;
   updatedAt: string;
 }

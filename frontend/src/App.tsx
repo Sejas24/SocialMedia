@@ -8,6 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import Profile from './pages/Profile';
 import PostDetail from './pages/PostDetail';
+import Admin from './pages/Admin';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         element={
           <ProtectedRoute>
             <Layout />
+            <Route path="/admin" element={<Admin />} />
           </ProtectedRoute>
         }
       >
@@ -28,7 +30,7 @@ function App() {
         <Route path="/profile/me" element={<Profile />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/posts/:id" element={<PostDetail />} />
-        <Route path="/admin" element={<h1>Panel Admin (Paso H)</h1>} />
+        
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

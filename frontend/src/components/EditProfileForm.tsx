@@ -91,22 +91,30 @@ const EditProfileForm = ({
         />
       </div>
 
-      <div className="field">
-        <label htmlFor="profile-avatar">
-          URL del avatar
-        </label>
+      <div className="form-group">
+  <label htmlFor="avatar">Imagen de perfil</label>
 
-        <input
-          id="profile-avatar"
-          type="url"
-          className="input"
-          value={avatar}
-          onChange={(e) =>
-            setAvatar(e.target.value)
-          }
-          placeholder="https://..."
-        />
-      </div>
+  <input
+    id="avatar"
+    type="url"
+    value={avatar}
+    onChange={(e) => setAvatar(e.target.value)}
+    placeholder="https://ejemplo.com/mi-foto.jpg"
+  />
+    {avatar && (
+  <img
+    src={avatar}
+    alt="Vista previa"
+    className="avatar-preview"
+    onError={(e) => {
+      e.currentTarget.src = '/default-avatar.png';
+    }}
+  />
+)}
+  <small>
+    Coloca la URL de una imagen para usarla como foto de perfil.
+  </small>
+</div>
 
       {error && (
         <p className="error-text">

@@ -18,7 +18,7 @@ const PostCard = ({ post, onDelete }: Props) => {
       <div className="post-header">
         <Link to={`/profile/${post.User.id}`} className="avatar-ring avatar-md">
           <img
-            src={post.User.avatar}
+            src={post.User.avatar ?? '/default-avatar.png'}
             alt={post.User.name}
           />
         </Link>

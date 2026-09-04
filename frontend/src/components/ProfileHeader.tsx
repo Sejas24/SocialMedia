@@ -1,4 +1,6 @@
 import type { User } from '../types';
+import FollowButton from './FollowButton';
+import FollowStats from './FollowStats';
 
 interface Props {
   user: User;
@@ -16,7 +18,7 @@ const ProfileHeader = ({
       <div className="profile-avatar avatar-ring">
         {user.avatar ? (
           <img
-            src={user.avatar}
+            src={user.avatar ?? '/default-avatar.png'}
             alt={user.name}
           />
         ) : (
@@ -47,6 +49,14 @@ const ProfileHeader = ({
           </button>
         )}
       </div>
+
+     {/* //agregar el boton de seguir y los stats de seguidores y seguidos -- falta verificar  */}
+     {/* follow stats and follow button */}
+
+      <FollowStats userId={user.id} />
+      {!isOwnProfile && (
+        <FollowButton userId={user.id} />
+      )}
     </section>
   );
 };

@@ -46,3 +46,10 @@ export interface AuthResponse {
   token: string;
   user: User;
 }
+export interface Follow {
+  id: number;
+  followerId: number;
+  followingId: number;
+  follower?: User;
+  following?: User;
+}

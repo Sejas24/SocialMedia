@@ -18,7 +18,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Revisa ambos storages: localStorage (recuérdame) y sessionStorage (sesión temporal)
     const storedToken = localStorage.getItem('token') || sessionStorage.getItem('token');
     const storedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
 

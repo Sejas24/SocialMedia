@@ -18,7 +18,6 @@ const Login = () => {
     e.preventDefault();
     setError(null);
     setLoading(true);
-
     try {
       const { data } = await loginRequest({ email, password });
       login(data.user, data.token, rememberMe);
@@ -35,56 +34,40 @@ const Login = () => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '80px auto' }}>
-      <h1>Iniciar sesión</h1>
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="auth-logo">Inicio Sesion</div>
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 12 }}>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ width: '100%', padding: 8 }}
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="field">
+            <label>Email</label>
+            <input type="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </div>
 
-        <div style={{ marginBottom: 12 }}>
-          <label>Contraseña</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{ width: '100%', padding: 8 }}
-          />
-        </div>
+          <div className="field">
+            <label>Contraseña</label>
+            <input type="password" className="input" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </div>
 
-        <div style={{ marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <input
-            type="checkbox"
-            id="rememberMe"
-            checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
-          />
-          <label htmlFor="rememberMe">Recuérdame</label>
-        </div>
+          <div className="checkbox-row">
+            <input type="checkbox" id="rememberMe" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+            <label htmlFor="rememberMe">Recuérdame</label>
+          </div>
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+          {error && <p className="error-text">{error}</p>}
 
-        <button type="submit" disabled={loading} style={{ width: '100%', padding: 10 }}>
-          {loading ? 'Ingresando...' : 'Ingresar'}
-        </button>
-      </form>
+          <button type="submit" disabled={loading} className="btn btn-primary">
+            {loading ? 'Ingresando...' : 'Ingresar'}
+          </button>
+        </form>
 
-      <p style={{ marginTop: 16 }}>
-        <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
-      </p>
-
-      <p style={{ marginTop: 8 }}>
-        ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
-      </p>
+        <p className="auth-footer">
+          <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
+        </p>
+        <p className="auth-footer">
+          ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
+        </p>
+      </div>
     </div>
   );
 };

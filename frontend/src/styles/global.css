@@ -1,0 +1,440 @@
+:root {
+  --blau: #004d98;
+  --blau-dark: #003a73;
+  --grana: #a50044;
+  --grana-dark: #7a0030;
+  --grana-light: #fdeef2;
+  --ink: #262626;
+  --muted: #737373;
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --border: #dbdbdb;
+  --radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(0, 77, 152, 0.07), transparent 45%),
+    radial-gradient(circle at 95% 100%, rgba(165, 0, 68, 0.07), transparent 45%),
+    var(--bg);
+  background-attachment: fixed;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--blau);
+  outline-offset: 2px;
+}
+
+/* ---------- Botones ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--grana);
+  color: #fff;
+  width: 100%;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--grana-dark);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: #f5f5f5;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--grana);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0;
+}
+
+/* ---------- Inputs ---------- */
+.field {
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.input,
+textarea.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.input:focus {
+  border-color: var(--blau);
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.error-text {
+  color: var(--grana);
+  font-size: 13px;
+  margin: 4px 0 12px;
+}
+
+.success-text {
+  color: #2e7d32;
+  font-size: 13px;
+  margin: 4px 0 12px;
+}
+
+/* ---------- Páginas de autenticación ---------- */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(150deg, rgba(0, 77, 152, 0.1) 0%, transparent 35%, transparent 65%, rgba(165, 0, 68, 0.1) 100%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 360px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  text-align: center;
+}
+
+.auth-logo {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, var(--blau), var(--grana));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.auth-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  margin: -12px 0 20px;
+}
+
+.auth-footer {
+  margin-top: 18px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.auth-footer a {
+  color: var(--grana);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.token-box {
+  margin-top: 20px;
+  padding: 12px;
+  background: var(--grana-light);
+  border: 1px solid var(--grana);
+  border-radius: 8px;
+  text-align: left;
+}
+
+.token-box p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+
+.token-box code {
+  display: block;
+  word-break: break-all;
+  font-size: 11px;
+  background: #fff;
+  padding: 8px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.navbar-inner {
+  width: 100%;
+  max-width: 935px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+}
+
+.navbar-logo {
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--blau), var(--grana));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.navbar-link {
+  text-decoration: none;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.navbar-link.admin {
+  color: var(--grana);
+  font-weight: 700;
+}
+
+.navbar-user {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---------- Layout ---------- */
+.page-main {
+  width: 100%;
+  max-width: 470px;
+  margin: 24px auto;
+  padding: 0 16px 60px;
+}
+
+/* ---------- Avatar con anillo blaugrana ---------- */
+.avatar-ring {
+  padding: 2.5px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blau), var(--grana));
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.avatar-ring img {
+  display: block;
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--surface);
+}
+
+.avatar-sm img {
+  width: 32px;
+  height: 32px;
+}
+
+.avatar-md img {
+  width: 40px;
+  height: 40px;
+}
+
+.avatar-lg img {
+  width: 86px;
+  height: 86px;
+}
+
+/* ---------- Post Card ---------- */
+.post-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+}
+
+.post-author-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.post-author-name {
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  color: var(--ink);
+  display: block;
+}
+
+.post-date {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.post-delete {
+  background: none;
+  border: none;
+  color: var(--grana);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.post-content {
+  padding: 0 14px 12px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.post-image {
+  width: 100%;
+  display: block;
+  max-height: 500px;
+  object-fit: cover;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.post-stats {
+  display: flex;
+  gap: 18px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.post-stats a {
+  text-decoration: none;
+  color: var(--muted);
+}
+
+.post-stats .likes {
+  color: var(--grana);
+  font-weight: 600;
+}
+
+/* ---------- Formulario crear post ---------- */
+.create-post {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.create-post textarea {
+  min-height: 70px;
+  resize: vertical;
+  margin-bottom: 8px;
+}
+
+.create-post .btn-primary {
+  width: auto;
+  margin-top: 10px;
+  padding: 8px 20px;
+}
+
+/* ---------- Estados vacíos / carga ---------- */
+.empty-state {
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  padding: 40px 20px;
+}
+
+.loading-state {
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  padding: 20px;
+}
+
+.load-more {
+  display: block;
+  margin: 20px auto;
+}

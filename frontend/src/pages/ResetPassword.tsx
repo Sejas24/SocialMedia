@@ -44,63 +44,68 @@ const ResetPassword = () => {
 
   if (success) {
     return (
-      <div style={{ maxWidth: 400, margin: '80px auto' }}>
-        <h1>¡Contraseña actualizada!</h1>
-        <p>Redirigiendo al login...</p>
+      <div className="auth-page">
+        <div className="auth-card">
+          <div className="auth-logo">Recuperar Contraseña</div>
+          <p className="success-text">¡Contraseña actualizada! Redirigiendo al login...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={{ maxWidth: 400, margin: '80px auto' }}>
-      <h1>Restablecer contraseña</h1>
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="auth-logo">Recuperar Contraseña</div>
+        <p className="auth-subtitle">Restablece tu contraseña</p>
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 12 }}>
-          <label>Token de recuperación</label>
-          <input
-            type="text"
-            value={token}
-            onChange={(e) => setToken(e.target.value)}
-            required
-            style={{ width: '100%', padding: 8 }}
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="field">
+            <label>Token de recuperación</label>
+            <input
+              type="text"
+              className="input"
+              value={token}
+              onChange={(e) => setToken(e.target.value)}
+              required
+            />
+          </div>
 
-        <div style={{ marginBottom: 12 }}>
-          <label>Nueva contraseña</label>
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            required
-            minLength={6}
-            style={{ width: '100%', padding: 8 }}
-          />
-        </div>
+          <div className="field">
+            <label>Nueva contraseña</label>
+            <input
+              type="password"
+              className="input"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+              minLength={6}
+            />
+          </div>
 
-        <div style={{ marginBottom: 12 }}>
-          <label>Confirmar contraseña</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            minLength={6}
-            style={{ width: '100%', padding: 8 }}
-          />
-        </div>
+          <div className="field">
+            <label>Confirmar contraseña</label>
+            <input
+              type="password"
+              className="input"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              minLength={6}
+            />
+          </div>
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+          {error && <p className="error-text">{error}</p>}
 
-        <button type="submit" disabled={loading} style={{ width: '100%', padding: 10 }}>
-          {loading ? 'Actualizando...' : 'Restablecer contraseña'}
-        </button>
-      </form>
+          <button type="submit" disabled={loading} className="btn btn-primary">
+            {loading ? 'Actualizando...' : 'Restablecer contraseña'}
+          </button>
+        </form>
 
-      <p style={{ marginTop: 16 }}>
-        <Link to="/login">Volver a iniciar sesión</Link>
-      </p>
+        <p className="auth-footer">
+          <Link to="/login">Volver a iniciar sesión</Link>
+        </p>
+      </div>
     </div>
   );
 };

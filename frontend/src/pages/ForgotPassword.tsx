@@ -35,49 +35,45 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '80px auto' }}>
-      <h1>Recuperar contraseña</h1>
-      <p style={{ color: '#666', fontSize: 14 }}>
-        Ingresa tu email y generaremos un token de recuperación.
-      </p>
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="auth-logo">Recuperar Contraseña</div>
+        <p className="auth-subtitle">Ingresa tu email y generaremos un token de recuperación</p>
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 12 }}>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ width: '100%', padding: 8 }}
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="field">
+            <label>Email</label>
+            <input
+              type="email"
+              className="input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {message && <p style={{ color: 'green' }}>{message}</p>}
+          {error && <p className="error-text">{error}</p>}
+          {message && <p className="success-text">{message}</p>}
 
-        <button type="submit" disabled={loading} style={{ width: '100%', padding: 10 }}>
-          {loading ? 'Enviando...' : 'Generar token'}
-        </button>
-      </form>
+          <button type="submit" disabled={loading} className="btn btn-primary">
+            {loading ? 'Enviando...' : 'Generar token'}
+          </button>
+        </form>
 
-      {resetToken && (
-        <div style={{ marginTop: 20, padding: 12, background: '#f5f5f5', borderRadius: 4 }}>
-          <p style={{ fontSize: 13, color: '#666', marginBottom: 8 }}>
-            ⚠️ Modo demostración: en producción este token llegaría por correo, no se mostraría aquí.
-          </p>
-          <p style={{ wordBreak: 'break-all', fontSize: 12 }}>
-            <strong>Token:</strong> {resetToken}
-          </p>
-          <Link to={`/reset-password?token=${resetToken}`}>
-            Ir a restablecer contraseña →
-          </Link>
-        </div>
-      )}
+        {resetToken && (
+          <div className="token-box">
+            <p>Token de recuperación:</p>
+            <code>{resetToken}</code>
+            <Link to={`/reset-password?token=${resetToken}`} className="btn-link">
+              Ir a restablecer contraseña →
+            </Link>
+          </div>
+        )}
 
-      <p style={{ marginTop: 16 }}>
-        <Link to="/login">Volver a iniciar sesión</Link>
-      </p>
+        <p className="auth-footer">
+          <Link to="/login">Volver a iniciar sesión</Link>
+        </p>
+      </div>
     </div>
   );
 };

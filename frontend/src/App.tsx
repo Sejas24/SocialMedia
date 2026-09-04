@@ -3,7 +3,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import Feed from './pages/Feed';
 import ProtectedRoute from './components/ProtectedRoute';
+import Layout from './components/Layout';
 
 function App() {
   return (
@@ -14,14 +16,17 @@ function App() {
       <Route path="/reset-password" element={<ResetPassword />} />
 
       <Route
-        path="/"
         element={
           <ProtectedRoute>
-            <h1>Red Social</h1>
-            <p>Feed Principal</p>
+            <Layout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route path="/" element={<Feed />} />
+        <Route path="/profile/me" element={<h1>Mi perfil (Paso E)</h1>} />
+        <Route path="/profile/:id" element={<h1>Perfil de otro usuario (Paso E)</h1>} />
+        <Route path="/admin" element={<h1>Panel Admin (Paso H)</h1>} />
+      </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import type { Post } from '../types';
 import { formatRelativeDate } from '../utils/formatDate';
 import { useAuth } from '../context/AuthContext';
+import LikeButton from './LikeButton';
 
 interface Props {
   post: Post;
@@ -41,10 +42,18 @@ const PostCard = ({ post, onDelete }: Props) => {
       {post.image && <img src={post.image} alt="" className="post-image" />}
 
       <div className="post-stats">
-        <span className="likes">❤️ {post.likesCount} likes</span>
-        <LikeButton post={post} />
-        <Link to={`/posts/${post.id}`}>💬 {post.commentsCount} comentarios</Link>
-      </div>
+  <LikeButton
+    postId={post.id}
+    initialLikes={post.likesCount}
+    initialLiked={
+      post.likedByCurrentUser ?? false
+    }
+  />
+
+  <Link to={`/posts/${post.id}`}>
+    💬 {post.commentsCount} comentarios
+  </Link>
+</div>
     </article>
   );
 };

@@ -14,3 +14,6 @@ export const getPostsByUserRequest = (userId: number) =>
   api.get<{ posts: Post[] }>(
     `/posts/user/${userId}`
   );
+
+export const getPostByIdRequest = (id: number) =>
+    api.get<Post>(`/posts/${id}`);

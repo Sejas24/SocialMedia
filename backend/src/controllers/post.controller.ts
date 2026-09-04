@@ -22,7 +22,12 @@ export const createPost = async (req: Request, res: Response): Promise<void> => 
 
     res.status(201).json({
       message: 'Publicación creada correctamente',
-      post: postWithAuthor,
+      post: {
+        ...postWithAuthor!.toJSON(),
+        likesCount: 0,
+        commentsCount: 0,
+        likedByCurrentUser: false,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -47,11 +52,18 @@ export const getFeed = async (req: Request, res: Response): Promise<void> => {
       posts.map(async (post) => {
         const likesCount = await Like.count({ where: { postId: post.id } });
         const commentsCount = await Comment.count({ where: { postId: post.id } });
+        const userLike = await Like.findOne({
+          where: {
+            postId: post.id,
+            userId: req.user!.id,
+          },
+        });
 
         return {
           ...post.toJSON(),
           likesCount,
           commentsCount,
+          likedByCurrentUser: !!userLike,
         };
       })
     );
@@ -66,6 +78,69 @@ export const getFeed = async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error al obtener el feed' });
+  }
+};
+
+export const getPostsByUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = Number(req.params.userId);
+
+    if (isNaN(userId)) {
+      res.status(400).json({
+        message: 'El userId debe ser un número válido',
+      });
+      return;
+    }
+
+    const posts = await Post.findAll({
+      where: { userId },
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'name', 'avatar'],
+        },
+      ],
+      order: [['createdAt', 'DESC']],
+    });
+
+    const postsWithData = await Promise.all(
+      posts.map(async (post) => {
+        const likesCount = await Like.count({
+          where: { postId: post.id },
+        });
+
+        const commentsCount = await Comment.count({
+          where: { postId: post.id },
+        });
+
+        const userLike = await Like.findOne({
+          where: {
+            postId: post.id,
+            userId: req.user!.id,
+          },
+        });
+
+        return {
+          ...post.toJSON(),
+          likesCount,
+          commentsCount,
+          likedByCurrentUser: !!userLike,
+        };
+      })
+    );
+
+    res.status(200).json({
+      posts: postsWithData,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: 'Error al obtener las publicaciones del usuario',
+    });
   }
 };
 
@@ -89,11 +164,18 @@ export const getPostById = async (req: Request, res: Response): Promise<void> =>
 
     const likesCount = await Like.count({ where: { postId: post.id } });
     const commentsCount = await Comment.count({ where: { postId: post.id } });
+    const userLike = await Like.findOne({
+      where: {
+        postId: post.id,
+        userId: req.user!.id,
+      },
+    });
 
     res.status(200).json({
       ...post.toJSON(),
       likesCount,
       commentsCount,
+      likedByCurrentUser: !!userLike,
     });
   } catch (error) {
     console.error(error);
